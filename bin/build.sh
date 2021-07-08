@@ -14,7 +14,7 @@ echo $tgz_filename
 cp -rf $base/package.json /tmp/package.json
 
 # Replace items in package.json
-sed -i 's|"main": "./lib/index.ts",|"main": "./dist/bundle.umd.js",\n  "module": "./dist/bundle.es.js",\n  "types": "./dist/index.d.ts",\n  "files": ["dist"],|g' $base/package.json
+sed -i 's|"main": "./index.ts",|"main": "./dist/bundle.umd.js",\n  "module": "./dist/bundle.es.js",\n  "types": "./dist/index.d.ts",\n  "files": ["dist"],|g' $base/package.json
 
 # Run vite build
 cd $base && npm run build-vite
