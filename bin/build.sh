@@ -7,7 +7,7 @@ base="$( cd "$(dirname "$0")" ; cd ..; pwd -P )"
 version=$(cat $base/package.json | grep '"version"' | awk 'BEGIN { FS=":" }; { print $2 }' | awk 'BEGIN { FS="\"" }; { print $2 }')
 
 # Package name (if @scoped/package name is scoped-package)
-tgz_filename=uvicore-vue3-${version}.tgz
+tgz_filename=uvicore-vue-auth-${version}.tgz
 echo $tgz_filename
 
 # Backup main package.json to restore later
@@ -26,5 +26,5 @@ cd $base && npm pack
 mkdir $base/dist-pack > /dev/null 2>&1
 mv $base/$tgz_filename $base/dist-pack/
 
-# Copy main package.json pack
+# Copy main package.json back
 cp -rf /tmp/package.json $base/
