@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { User } from '../models';
+import { User } from './models';
 
 export const useUserStore = defineStore({
   // unique id of the store across your application
