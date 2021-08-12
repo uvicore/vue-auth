@@ -1,20 +1,6 @@
-// export interface User {
-//   id: number,
-//   uuid: string,
-//   username: string,
-//   email: string,
-//   firstName: string,
-//   lastName: string,
-//   title: string,
-//   avatar: string,
-//   groups: string[], // or Array<string>
-//   roles: string[],
-//   permissions: string[],
-//   superadmin: boolean,
-//   //authenticated: boolean,
-// }
-
-
+/**
+ * Main Auth UserInfo class
+ */
 export class UserInfo {
   id: number
   uuid: string
@@ -66,74 +52,3 @@ export class UserInfo {
   }
 
 }
-
-
-
-
-// Experiment with uvicore orm model... NO
-
-
-
-
-// import { reactive, UnwrapRef } from 'vue';
-// import { Model, ModelConfig, QueryBuilder, Results } from '@uvicore/vue-orm';
-
-
-// /**
-//  * Auth User Model
-//  */
-// class UserModel extends Model {
-//   id: number
-//   uuid: string
-//   username: string
-//   email: string
-//   first_name: string
-//   last_name: string
-//   title: string
-//   avatar: string
-//   groups: string[]
-//   roles: string[]
-//   permissions: string[]
-//   superadmin: boolean
-//   authenticated: boolean
-
-//   static _config: ModelConfig = {
-//     connection: 'wiki',
-//     path: '/auth/userinfo',
-//   }
-
-//   public constructor({
-//     id, uuid, username, email, first_name, last_name, title,
-//     avatar, groups, roles, permissions, superadmin, authenticated,
-//   }: UserModel) {
-//     super();
-//     this.id = id
-//     this.uuid = uuid
-//     this.username = username
-//     this.email = email
-//     this.first_name = first_name,
-//     this.last_name = last_name,
-//     this.title = title,
-//     this.avatar = avatar
-//     this.groups = groups
-//     this.roles = roles
-//     this.permissions = permissions
-//     this.superadmin = superadmin
-//     this.authenticated = authenticated
-//   }
-
-// }
-
-
-// /**
-//  * Space model statics (because Generics do not work on static properties)
-//  */
-// export class User extends UserModel {
-//   public static query(): QueryBuilder<UserModel> {
-//     return new QueryBuilder<UserModel>(UserModel);
-//   }
-
-//   public static newRef(): UnwrapRef<Results<UserModel>> {
-//     return reactive<Results<UserModel>>(new Results());
-//   }
-// }

@@ -1,6 +1,11 @@
 import { AuthInterface } from './interface';
 //import { AuthInterface } from './interface';
 
+/**
+ * Vue plugin for Uvicore Auth Library
+ * @param config any
+ * @returns
+ */
 export function createAuth(config: any): AuthInterface {
 
     // config is just the auth config, all drivers, not your entire config

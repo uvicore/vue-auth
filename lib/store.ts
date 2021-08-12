@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
 import { UserInfo } from './user_info';
-import { UnwrapRef } from 'vue';
-import { Results } from '@uvicore/vue-orm';
 import { AuthInterface } from './interface';
-import { stringifyQuery } from 'vue-router';
 
 
-
+/**
+ * Pinia User Store
+ */
 export const useUserStore = defineStore({
   // unique id of the store across your application
   id: 'user',

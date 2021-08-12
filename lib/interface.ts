@@ -1,10 +1,9 @@
-import { Router } from 'vue-router';
-
-
-//import { UnwrapRef } from 'vue';
-//import { Results } from '@uvicore/vue-orm';
 import { UserInfo } from './user_info';
 
+
+/**
+ * Auth Interface for multi-driver Backend Adapter Pattern
+ */
 export interface AuthInterface {
 
   // Auth config object passed in the Vue plugin
