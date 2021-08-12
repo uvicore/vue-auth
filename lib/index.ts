@@ -1,9 +1,7 @@
 export * from './adapters';
-export * from './models';
 export * from './interface';
 export * from './plugin';
-export { useUserStore } from './store';
-
+export * from './store';
 
 // /**
 //  * Vue3 Plugin

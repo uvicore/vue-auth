@@ -1,67 +1,80 @@
-import { User, UserManagerSettings, WebStorageStateStore } from "oidc-client";
-import {
-  createOidcAuth,
-  LogLevel,
-  OidcAuth as BaseOidcAuth,
-  SignInType,
-} from "vue-oidc-client/vue3";
+import axios from 'axios';
+import { BaseAuth } from './base';
 import { Router } from 'vue-router';
-
-
-import { useUserStore } from '../store'
-
+import { UserInfo } from '../user_info';
 import { AuthInterface } from '../interface';
+import { OidcAuth as BaseOidcAuth } from 'vue-oidc-client/vue3';
+import {createOidcAuth, LogLevel, SignInType} from 'vue-oidc-client/vue3';
+import { User, UserManagerSettings, WebStorageStateStore } from 'oidc-client';
 
-// // vue-oidc-client
-// // https://github.com/soukoku/vue-oidc-client
 
-export class OidcAuth implements AuthInterface {
-  public config: any;
+/**
+ * Uvicore Auth OIDC Adapter vue-oidc-client
+ * See https://github.com/soukoku/vue-oidc-client
+ */
+export class OidcAuth extends BaseAuth implements AuthInterface {
+
+  /**
+   * Private base, not meant for user consumption
+   * This is the actual vue-oidc-client which we are adapting
+   */
   private base: BaseOidcAuth = null!;
 
-  public constructor(config: any) {
-    this.config = config;
+  /**
+   * User is currently logged in
+   */
+   public get isAuthenticated(): boolean {
+    return this.base.isAuthenticated
   }
 
+  /**
+   * JWT access token from IDP
+   */
+  public get token(): string {
+    return this.base.accessToken;
+  }
+
+  /**
+   * IDP user profile in JWT or from IDP profile endpoint
+   */
+  public get profile() {
+    return this.base.userProfile;
+  }
+
+  /**
+   * Startup event promise
+   * @returns Promise<boolean>
+   */
   public startup(): Promise<boolean> {
     return this.base.startup();
   }
 
+  /**
+   * Login to IDP via OIDC
+   */
+   public login(): void {
+    this.base.signIn();
+  }
+
+  /**
+   * Logout of IDP via OIDC
+   */
+  public logout(): void {
+    this.base.signOut();
+  }
+
+  /**
+   * OIDC specific useRouter method
+   * @param router
+   */
   public useRouter(router: Router): void {
     this.base.useRouter(router)
   }
 
-  public login(): void {
-    //this.base.signIn();
-    console.log('OIDC adapter login()')
-    this.base.signIn();
-
-    // mainOidc.isAuthenticated; // if logged in
-    // mainOidc.accessToken;     // if applicable and valid
-    // mainOidc.userProfile;     // user claims object
-
-    // mainOidc.appUrl;   // value passed in createOidcAuth()
-    // mainOidc.authName; // value passed in createOidcAuth()
-    // signIn()
-    // signOut()
-    // startSilentRenew()
-    // stopSilentRenew()
-  }
-
-  public get isAuthenticated(): boolean {
-    return this.base.isAuthenticated
-  }
-
-  public logout(): void {
-    console.log('OIDC adapter logout()');
-    this.base.signOut();
-  }
-
-  private get user() {
-    return useUserStore()
-  }
-
-  public init(): this {
+  /**
+   * Initialize this adapter
+   */
+  public init(): void {
     let appUrl: string = this.config.appUrl;  // Fix to ensure / at end
     let authUrl: string = this.config.authUrl;  // Fix to ensure NO / at end
 
@@ -109,49 +122,87 @@ export class OidcAuth implements AuthInterface {
       this.config.appUrl + '/',  // Requires a / at end
       authConfig,
       console,
-      LogLevel.Debug
+      // @ts-ignore
+      LogLevel[this.config.logLevel],
     );
     this.base = auth;
 
 
     auth.events.addAccessTokenExpiring(() => {
       // eslint-disable-next-line no-console
-      console.debug("Auth Event: access token expiring");
+      console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: access token expiring");
     });
 
     auth.events.addAccessTokenExpired(() => {
       // eslint-disable-next-line no-console
-      console.debug("Auth Event: access token expired");
+      console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: access token expired");
     });
 
     auth.events.addSilentRenewError((err: Error) => {
       // eslint-disable-next-line no-console
-      console.error("Auth Event: silent renew error", err);
+      console.error("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: silent renew error", err);
     });
 
+    /**
+     * User logged in and JWT received from OIDC
+     */
     auth.events.addUserLoaded((user: User) => {
       // eslint-disable-next-line no-console
-      console.debug("Auth Event: user loaded", user);
-      this.user.onUserLoaded(user);
+      console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: user loaded", user);
+      //this.user.onUserLoaded(user);
+
+      // Get the jwt access token from the IDP response
+      const jwt = user.access_token;
+
+      // Add this jwt to axios default headers so all future axios requests include this header
+      axios.defaults.headers.Authorization = 'Bearer ' + jwt;
+
+      // Query the uvicore userinfo endpoint with our jwt
+      axios.get(this.config.uvicoreUserInfoUrl).then((res) => {
+        const data = res.data
+        data.token = jwt
+
+        // Translate understores to camelCase
+        data.firstName = data.first_name
+        data.lastName = data.last_name
+        delete data.first_name
+        delete data.last_name
+
+        // Convert JSON data into actual UserInfo class instance
+        const userInfo = new UserInfo(data);
+
+        // Set user store
+        this.userStore.set(userInfo);
+
+        //storage.setItem(storageKey, JSON.stringify(user));
+      }).catch((error) => {
+        console.error('AXIOS ERROR on uvicore userinfo');
+      })
+
     });
 
+    /**
+     * EVENT User logged out
+     */
     auth.events.addUserUnloaded(() => {
       // eslint-disable-next-line no-console
-      console.debug("Auth Event: user unloaded");
+      console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: user unloaded");
+      //this.userStore.onUserUnloaded();
+      this.removeStorage()
     });
 
     auth.events.addUserSignedOut(() => {
       // eslint-disable-next-line no-console
-      console.debug("Auth Event: user signed out");
+      console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: user signed out");
     });
 
     auth.events.addUserSessionChanged(() => {
       // eslint-disable-next-line no-console
-      console.debug("Auth Event: user session changed");
+      console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: user session changed");
     });
 
     //return auth;
-    return this;
+    //return this;
   }
 
 }
