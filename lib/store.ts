@@ -53,12 +53,12 @@ export const useUserStore = defineStore({
     isSuperadmin: (state) => state.superadmin,
     isNotAdmin: (state) => !state.superadmin,
 
-    isAuthenticated(state) { this.authenticated },
-    check(state) { this.authenticated },
-    loggedIn(state) { this.authenticated },
-    isLoggedIn(state) { this.authenticated },
-    isNotAuthenticated(state) { !this.authenticated },
-    isNotLoggedIn(state) { !this.authenticated },
+    isAuthenticated: (state) => state._adapter.isAuthenticated,
+    check: (state) => state._adapter.isAuthenticated,
+    loggedIn: (state) => state._adapter.isAuthenticated,
+    isLoggedIn: (state) => state._adapter.isAuthenticated,
+    isNotAuthenticated: (state) => !state._adapter.isAuthenticated,
+    isNotLoggedIn: (state) => !state._adapter.isAuthenticated,
   },
 
   actions: {

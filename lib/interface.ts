@@ -40,3 +40,4 @@ export interface AuthInterface {
   // NO, this is OIDC specific, does not belong in an generic interface
   // useRouter(router: Router): void
 }
+
