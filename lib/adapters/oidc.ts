@@ -18,7 +18,7 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
    * Private base, not meant for user consumption
    * This is the actual vue-oidc-client which we are adapting
    */
-  private base: BaseOidcAuth = null!;
+  public base: BaseOidcAuth = null!;
 
   /**
    * User is currently logged in
@@ -141,6 +141,7 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
     auth.events.addSilentRenewError((err: Error) => {
       // eslint-disable-next-line no-console
       console.error("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: silent renew error", err);
+      //this.removeStorage()
     });
 
     /**
@@ -194,6 +195,7 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
     auth.events.addUserSignedOut(() => {
       // eslint-disable-next-line no-console
       console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: user signed out");
+      this.removeStorage()
     });
 
     auth.events.addUserSessionChanged(() => {

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { UserInfo } from './user_info';
 import { AuthInterface } from './interface';
-
+import { watch } from 'vue';
 
 /**
  * Pinia User Store
@@ -32,6 +32,7 @@ export const useUserStore = defineStore({
     permissions: [] as string[],
     superadmin: false,
     token: '',
+    authenticated: false,
 
   }),
 
@@ -39,7 +40,6 @@ export const useUserStore = defineStore({
     // Computed
     //name: (state) => state.profile.firstName + ' ' + state.profile.lastName,
     name: (state) => state.firstName + ' ' + state.lastName,
-    authenticated: (state) => state._adapter.isAuthenticated,
     //token: (state) => state._adapter.token,
     profile: (state) => state._adapter.profile,
 
@@ -53,12 +53,12 @@ export const useUserStore = defineStore({
     isSuperadmin: (state) => state.superadmin,
     isNotAdmin: (state) => !state.superadmin,
 
-    isAuthenticated: (state) => state._adapter.isAuthenticated,
-    check: (state) => state._adapter.isAuthenticated,
-    loggedIn: (state) => state._adapter.isAuthenticated,
-    isLoggedIn: (state) => state._adapter.isAuthenticated,
-    isNotAuthenticated: (state) => !state._adapter.isAuthenticated,
-    isNotLoggedIn: (state) => !state._adapter.isAuthenticated,
+    isAuthenticated: (state) => state.authenticated,
+    check: (state) => state.authenticated,
+    loggedIn: (state) => state.authenticated,
+    isLoggedIn: (state) => state.authenticated,
+    isNotAuthenticated: (state) => !state.authenticated,
+    isNotLoggedIn: (state) => !state.authenticated,
   },
 
   actions: {
@@ -76,6 +76,12 @@ export const useUserStore = defineStore({
         const user = this._adapter.getStorage();
         if (user) this.set(user);
       }
+
+      watch(() => this._adapter.isAuthenticated, (auth2) => {
+        console.log(' 77777777777777777777777777777777777777777777777777 auth changed');
+
+      });
+
     },
 
     /**
@@ -95,6 +101,7 @@ export const useUserStore = defineStore({
       this.roles = userInfo.roles;
       this.permissions = userInfo.permissions;
       this.superadmin = userInfo.superadmin;
+      this.authenticated = this._adapter.isAuthenticated;
       this.token = userInfo.token;
 
       // Set user info to storage
