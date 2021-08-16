@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { UserInfo } from './user_info';
 import { AuthInterface } from './interface';
-import { watch } from 'vue';
+
 
 /**
  * Pinia User Store
@@ -76,11 +76,6 @@ export const useUserStore = defineStore({
         const user = this._adapter.getStorage();
         if (user) this.set(user);
       }
-
-      watch(() => this._adapter.isAuthenticated, (auth2) => {
-        console.log(' 77777777777777777777777777777777777777777777777777 auth changed');
-
-      });
 
     },
 

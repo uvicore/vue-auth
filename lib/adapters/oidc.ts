@@ -18,7 +18,7 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
    * Private base, not meant for user consumption
    * This is the actual vue-oidc-client which we are adapting
    */
-  public base: BaseOidcAuth = null!;
+  private base: BaseOidcAuth = null!;
 
   /**
    * User is currently logged in
