@@ -13,6 +13,7 @@ export class UserInfo {
   groups: string[]
   roles: string[]
   permissions: string[]
+  apps: string[]
   superadmin: boolean
   token: string
 
@@ -32,7 +33,7 @@ export class UserInfo {
   // ) {
   public constructor({
     id, uuid, username, email, firstName, lastName,
-    title, avatar, groups, roles, permissions, superadmin, token
+    title, avatar, groups, roles, permissions, apps, superadmin, token
   }: UserInfo) {
     // Constructor using functional destructuring so I can pass in an object as params
     // https://medium.com/@rileyhilliard/es6-destructuring-in-typescript-4c048a8e9e15
@@ -47,6 +48,7 @@ export class UserInfo {
     this.groups = groups
     this.roles = roles
     this.permissions = permissions
+    this.apps = apps
     this.superadmin = superadmin
     this.token = token
   }

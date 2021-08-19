@@ -30,6 +30,7 @@ export const useUserStore = defineStore({
     groups: [] as string[],
     roles: [] as string[],
     permissions: [] as string[],
+    apps: [] as string[],
     superadmin: false,
     token: '',
     authenticated: false,
@@ -95,6 +96,7 @@ export const useUserStore = defineStore({
       this.groups = userInfo.groups;
       this.roles = userInfo.roles;
       this.permissions = userInfo.permissions;
+      this.apps = userInfo.apps;
       this.superadmin = userInfo.superadmin;
       this.authenticated = this._adapter.isAuthenticated;
       this.token = userInfo.token;

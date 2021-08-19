@@ -98,8 +98,9 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
         authorization_endpoint: `${authUrl}/oauth2/authorize`,
         token_endpoint: `${authUrl}/oauth2/token`,
 
-        userinfo_endpoint: `${authUrl}/oauth2/userinfo`,
-        //userinfo_endpoint: `${appUrl}/oauth2/userinfo`,
+        // Use our own custom userInfo
+        userinfo_endpoint: this.config.uvicoreUserInfoUrl,
+        //userinfo_endpoint: `${authUrl}/oauth2/userinfo`,
 
         jwks_uri: `${authUrl}/.well-known/jwks.json`,
         end_session_endpoint: `${authUrl}/oauth2/logout?client_id=${this.config.appId}`,
@@ -150,7 +151,6 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
     auth.events.addUserLoaded((user: User) => {
       // eslint-disable-next-line no-console
       console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: user loaded", user);
-      //this.user.onUserLoaded(user);
 
       // Get the jwt access token from the IDP response
       const jwt = user.access_token;
@@ -158,27 +158,34 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
       // Add this jwt to axios default headers so all future axios requests include this header
       axios.defaults.headers.Authorization = 'Bearer ' + jwt;
 
-      // Query the uvicore userinfo endpoint with our jwt
-      axios.get(this.config.uvicoreUserInfoUrl).then((res) => {
-        const data = res.data
-        data.token = jwt
+      // Convert /userinfo profile into UserInfo class
+      // @ts-ignore
+      const userInfo = new UserInfo(user.profile);
 
-        // Translate understores to camelCase
-        data.firstName = data.first_name
-        data.lastName = data.last_name
-        delete data.first_name
-        delete data.last_name
+      // Set user store
+      this.userStore.set(userInfo);
 
-        // Convert JSON data into actual UserInfo class instance
-        const userInfo = new UserInfo(data);
+      // // Query the uvicore userinfo endpoint with our jwt
+      // axios.get(this.config.uvicoreUserInfoUrl).then((res) => {
+      //   const data = res.data
+      //   data.token = jwt
 
-        // Set user store
-        this.userStore.set(userInfo);
+      //   // Translate understores to camelCase
+      //   data.firstName = data.first_name
+      //   data.lastName = data.last_name
+      //   delete data.first_name
+      //   delete data.last_name
 
-        //storage.setItem(storageKey, JSON.stringify(user));
-      }).catch((error) => {
-        console.error('AXIOS ERROR on uvicore userinfo');
-      })
+      //   // Convert JSON data into actual UserInfo class instance
+      //   const userInfo = new UserInfo(data);
+
+      //   // Set user store
+      //   this.userStore.set(userInfo);
+
+      //   //storage.setItem(storageKey, JSON.stringify(user));
+      // }).catch((error) => {
+      //   console.error('AXIOS ERROR on uvicore userinfo');
+      // })
 
     });
 
