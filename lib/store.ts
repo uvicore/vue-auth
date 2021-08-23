@@ -27,14 +27,14 @@ export const useUserStore = defineStore({
     last_name: 'User',
     title: 'Anonymous',
     avatar: 'something',
+    superadmin: false,
+    authenticated: false,
     groups: [] as string[],
     roles: [] as string[],
     permissions: [] as string[],
     apps: [] as string[],
-    superadmin: false,
+    apis: [] as string[],
     token: '',
-    authenticated: false,
-
   }),
 
   getters: {
@@ -73,7 +73,7 @@ export const useUserStore = defineStore({
       this._adapter = auth
 
       // On page reload, pull user from storage and set pinia store
-      if (auth.profile.aud || auth.profile.applicationId) {
+      if (auth.profile.sub) {
         // Convert /userinfo profile into UserInfo class
         // @ts-ignore
         const userInfo = new UserInfo(auth.profile);
@@ -94,12 +94,13 @@ export const useUserStore = defineStore({
       this.last_name = userInfo.last_name;
       this.title = userInfo.title;
       this.avatar = userInfo.avatar;
+      this.superadmin = userInfo.superadmin;
+      this.authenticated = this._adapter.isAuthenticated;
       this.groups = userInfo.groups;
       this.roles = userInfo.roles;
       this.permissions = userInfo.permissions;
       this.apps = userInfo.apps;
-      this.superadmin = userInfo.superadmin;
-      this.authenticated = this._adapter.isAuthenticated;
+      this.apis = userInfo.apis;
       this.token = userInfo.token;
 
       // Set user info to storage
