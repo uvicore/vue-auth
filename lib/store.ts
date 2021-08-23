@@ -23,8 +23,8 @@ export const useUserStore = defineStore({
     uuid: '11c28e64-cefb-418a-9981-573613dbec8f',  // doesn't matter what this is? I think?
     username: 'anonymous',
     email: 'anonymous@example.com',
-    firstName: 'Anonymous',
-    lastName: 'User',
+    first_name: 'Anonymous',
+    last_name: 'User',
     title: 'Anonymous',
     avatar: 'something',
     groups: [] as string[],
@@ -40,7 +40,7 @@ export const useUserStore = defineStore({
   getters: {
     // Computed
     //name: (state) => state.profile.firstName + ' ' + state.profile.lastName,
-    name: (state) => state.firstName + ' ' + state.lastName,
+    name: (state) => state.first_name + ' ' + state.last_name,
     //token: (state) => state._adapter.token,
     profile: (state) => state._adapter.profile,
 
@@ -90,8 +90,8 @@ export const useUserStore = defineStore({
       this.uuid = userInfo.uuid;
       this.username = userInfo.username;
       this.email = userInfo.email;
-      this.firstName = userInfo.firstName;
-      this.lastName = userInfo.lastName;
+      this.first_name = userInfo.first_name;
+      this.last_name = userInfo.last_name;
       this.title = userInfo.title;
       this.avatar = userInfo.avatar;
       this.groups = userInfo.groups;

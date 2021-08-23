@@ -6,8 +6,8 @@ export class UserInfo {
   uuid: string
   username: string
   email: string
-  firstName: string
-  lastName: string
+  first_name: string
+  last_name: string
   title: string
   avatar: string
   groups: string[]
@@ -17,22 +17,8 @@ export class UserInfo {
   superadmin: boolean
   token: string
 
-  // public constructor(
-  //   id: number,
-  //   uuid: string,
-  //   username: string,
-  //   email: string,
-  //   firstName: string,
-  //   lastName: string,
-  //   title: string,
-  //   avatar: string,
-  //   groups: string[],
-  //   roles: string[],
-  //   permissions: string[],
-  //   superadmin: boolean,
-  // ) {
   public constructor({
-    id, uuid, username, email, firstName, lastName,
+    id, uuid, username, email, first_name, last_name,
     title, avatar, groups, roles, permissions, apps, superadmin, token
   }: UserInfo) {
     // Constructor using functional destructuring so I can pass in an object as params
@@ -41,8 +27,8 @@ export class UserInfo {
     this.uuid = uuid
     this.username = username,
     this.email = email
-    this.firstName = firstName
-    this.lastName = lastName
+    this.first_name = first_name
+    this.last_name = last_name
     this.title = title
     this.avatar = avatar
     this.groups = groups

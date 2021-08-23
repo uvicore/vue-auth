@@ -78,9 +78,38 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
     let appUrl: string = this.config.appUrl;  // Fix to ensure / at end
     let authUrl: string = this.config.authUrl;  // Fix to ensure NO / at end
 
-    const apis = this.config.apis
-      .filter((api: any) => api.uvicore)
-      .map((api: any) => api.name);
+
+    // app: {
+    //   // APIs using connection string naming
+    //   apis: {
+    //     'wiki': {
+    //       name: 'wiki-uvicore-api',
+    //       url: 'https://wiki-api-local.triglobal.io/api',
+    //       uvicore: true
+    //     },
+    //   },
+    // },
+
+    // const apis = Object.entries(this.config.apis)
+    //   .filter((api: any) => api.uvicore)
+    //   .map((api: any) => api.name);
+
+    // const filtered = Object.keys(raw)
+    // .filter(key => allowed.includes(key))
+    // .reduce((obj, key) => {
+    //   return {
+    //     ...obj,
+    //     [key]: raw[key]
+    //   };
+    // }, {});
+
+    // const apis = Object.entries(this.config.apis).forEach(([k, v]) => {
+    //   console.log(k, v);
+    // })
+
+    const apis = Object.entries(this.config.apis)
+      .filter(([k, v]) => (v as any).uvicore)
+      .map(([k, v]) => (v as any).name);
     let params = apis.join(',');
     if (params) params = '?require_apis=' + params;
     let userinfoEndpoint = this.config.uvicoreUserInfoUrl + params;
