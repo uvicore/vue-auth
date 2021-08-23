@@ -73,11 +73,12 @@ export const useUserStore = defineStore({
       this._adapter = auth
 
       // On page reload, pull user from storage and set pinia store
-      if (this._adapter.hasStorage()) {
-        const user = this._adapter.getStorage();
-        if (user) this.set(user);
+      if (auth.profile.aud || auth.profile.applicationId) {
+        // Convert /userinfo profile into UserInfo class
+        // @ts-ignore
+        const userInfo = new UserInfo(auth.profile);
+        this.set(userInfo);
       }
-
     },
 
     /**
@@ -102,7 +103,7 @@ export const useUserStore = defineStore({
       this.token = userInfo.token;
 
       // Set user info to storage
-      this._adapter.setStorage(userInfo);
+      //this._adapter.setStorage(userInfo);
     },
 
     /**
@@ -142,9 +143,6 @@ export const useUserStore = defineStore({
   }
 
 });
-
-
-
 
 
 

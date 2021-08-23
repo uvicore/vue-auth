@@ -78,6 +78,13 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
     let appUrl: string = this.config.appUrl;  // Fix to ensure / at end
     let authUrl: string = this.config.authUrl;  // Fix to ensure NO / at end
 
+    const apis = this.config.apis
+      .filter((api: any) => api.uvicore)
+      .map((api: any) => api.name);
+    let params = apis.join(',');
+    if (params) params = '?require_apis=' + params;
+    let userinfoEndpoint = this.config.uvicoreUserInfoUrl + params;
+
     let authConfig = {
       authority: authUrl,
       client_id: this.config.appId,
@@ -99,7 +106,7 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
         token_endpoint: `${authUrl}/oauth2/token`,
 
         // Use our own custom userInfo
-        userinfo_endpoint: this.config.uvicoreUserInfoUrl,
+        userinfo_endpoint: userinfoEndpoint,
         //userinfo_endpoint: `${authUrl}/oauth2/userinfo`,
 
         jwks_uri: `${authUrl}/.well-known/jwks.json`,
@@ -196,13 +203,13 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
       // eslint-disable-next-line no-console
       console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: user unloaded");
       //this.userStore.onUserUnloaded();
-      this.removeStorage()
+      //this.removeStorage()
     });
 
     auth.events.addUserSignedOut(() => {
       // eslint-disable-next-line no-console
       console.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuth Event: user signed out");
-      this.removeStorage()
+      //this.removeStorage()
     });
 
     auth.events.addUserSessionChanged(() => {

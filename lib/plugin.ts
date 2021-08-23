@@ -6,17 +6,20 @@ import { AuthInterface } from './interface';
  * @param config any
  * @returns
  */
-export function createAuth(config: any): AuthInterface {
+export function createAuth(authConfig: any, apiConfig: any): AuthInterface {
 
     // config is just the auth config, all drivers, not your entire config
     // Narrow config to this drivers config
-    let driverConfig = config[config.driver];
+    let driverConfig = authConfig[authConfig.driver];
 
     // Add some root auth configs to driverConfig
-    driverConfig.appUrl = config.appUrl;
-    driverConfig.uvicoreUserInfoUrl = config.uvicoreUserInfoUrl;
-    driverConfig.storage = config.storage;
-    driverConfig.storageKey = config.storageKey;
+    driverConfig.appUrl = authConfig.appUrl;
+    driverConfig.uvicoreUserInfoUrl = authConfig.uvicoreUserInfoUrl;
+    driverConfig.storage = authConfig.storage;
+    driverConfig.storageKey = authConfig.storageKey;
+
+    // Add in our apiConfig to this driverConfig
+    driverConfig.apis = apiConfig;
 
     // Instantiate the drivers adapter class
     const adapter = new driverConfig.adapter(driverConfig);
