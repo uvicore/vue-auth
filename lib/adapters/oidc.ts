@@ -197,6 +197,7 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
       // Convert /userinfo profile into UserInfo class
       // @ts-ignore
       const userInfo = new UserInfo(user.profile);
+      userInfo.token = jwt;
 
       // Set user store
       this.userStore.set(userInfo);

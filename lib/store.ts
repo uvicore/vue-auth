@@ -77,6 +77,7 @@ export const useUserStore = defineStore({
         // Convert /userinfo profile into UserInfo class
         // @ts-ignore
         const userInfo = new UserInfo(auth.profile);
+        userInfo.token = auth.token;
         this.set(userInfo);
       }
     },
