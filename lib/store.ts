@@ -2,7 +2,7 @@ import axios from 'axios';
 import { defineStore } from 'pinia';
 import { UserInfo } from './user_info';
 import { AuthInterface } from './interface';
-
+import { User } from 'oidc-client'
 
 /**
  * Pinia User Store
@@ -42,6 +42,7 @@ export const useUserStore = defineStore({
     // Computed
     //name: (state) => state.profile.firstName + ' ' + state.profile.lastName,
     name: (state) => state.first_name + ' ' + state.last_name,
+    initials: (state) => state.first_name[0].toUpperCase() + state.last_name[0].toUpperCase(),
     //token: (state) => state._adapter.token,
     profile: (state) => state._adapter.profile,
 
@@ -115,15 +116,15 @@ export const useUserStore = defineStore({
     /**
      * Logout (passthrough to auth adapter)
      */
-    login() {
-      this._adapter.login()
+    login(): Promise<User | void> {
+      return this._adapter.login()
     },
 
     /**
      * Login (passthrough to auth adapter)
      */
-    logout() {
-      this._adapter.logout()
+    logout(): Promise<void> {
+      return this._adapter.logout()
     },
 
     can(permissions: string[]): boolean {

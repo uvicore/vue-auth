@@ -52,15 +52,15 @@ export class OidcAuth extends BaseAuth implements AuthInterface {
   /**
    * Login to IDP via OIDC
    */
-   public login(): void {
-    this.base.signIn();
+  public login(): Promise<User | void> {
+    return this.base.signIn();
   }
 
   /**
    * Logout of IDP via OIDC
    */
-  public logout(): void {
-    this.base.signOut();
+  public logout(): Promise<void> {
+    return this.base.signOut();
   }
 
   /**

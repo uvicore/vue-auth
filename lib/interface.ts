@@ -1,5 +1,5 @@
 import { UserInfo } from './user_info';
-
+import { User } from 'oidc-client'
 
 /**
  * Auth Interface for multi-driver Backend Adapter Pattern
@@ -29,8 +29,8 @@ export interface AuthInterface {
 
   // Required adapter methods
   startup(): Promise<boolean>
-  login(): void
-  logout(): void
+  login(): Promise<User | void>
+  logout(): Promise<void>
   init(): void
   getStorage(): UserInfo|null
   hasStorage(): boolean
