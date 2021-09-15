@@ -596,13 +596,13 @@ picomatch@^2.2.3:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.0.tgz#f1f061de8f6a4bf022892e2d128234fb98302972"
   integrity sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==
 
-pinia@^2.0.0-beta.2:
-  version "2.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.0.0-rc.4.tgz#43fca89aeb8d397ca9900f001c2125c4d6765dd6"
-  integrity sha512-I43V1TIFyDWT4UTi1CPLQXQZYXGQHQMKpDPI+oxC2fv0c+ej0fQBoKCn4WbfRWB+Vf5chhWM97GFLI+OWmUQEQ==
+pinia@^2.0.0-rc.9:
+  version "2.0.0-rc.9"
+  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.0.0-rc.9.tgz#ea0812ea28f8197f14767e9b731ae10d3a523803"
+  integrity sha512-JrFnxKbuyYPEZ6ZS56sBHRzabZj+5xkJj8jxCHGNJ1h2I824QJuLXJVV/3pgkUw0pfXYrRxcO6EiV9+wapSicg==
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.15"
-    vue-demi latest
+    vue-demi "*"
 
 postcss-modules-extract-imports@^3.0.0:
   version "3.0.0"
@@ -863,10 +863,10 @@ vite@^2.3.7:
   optionalDependencies:
     fsevents "~2.3.2"
 
-vue-demi@latest:
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.11.2.tgz#faa06da53887c493a695b997f4fcb4784a667990"
-  integrity sha512-J+X8Au6BhQdcej6LY4O986634hZLu55L0ewU2j8my7WIKlu8cK0dqmdUxqVHHMd/cMrKKZ9SywB/id6aLhwCtA==
+vue-demi@*:
+  version "0.11.4"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.11.4.tgz#6101992fe4724cf5634018a16e953f3052e94e2a"
+  integrity sha512-/3xFwzSykLW2HiiLie43a+FFgNOcokbBJ+fzvFXd0r2T8MYohqvphUyDQ8lbAwzQ3Dlcrb1c9ykifGkhSIAk6A==
 
 vue-oidc-client@^1.0.0-alpha.2:
   version "1.0.0-alpha.2"
