@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { defineStore } from 'pinia';
 import { UserInfo } from './user_info';
 import { AuthInterface } from './interface';
@@ -79,6 +80,9 @@ export const useUserStore = defineStore({
         const userInfo = new UserInfo(auth.profile);
         userInfo.token = auth.token;
         this.set(userInfo);
+
+        // Set axios default headers with token
+        axios.defaults.headers.Authorization = 'Bearer ' + userInfo.token;
       }
     },
 
